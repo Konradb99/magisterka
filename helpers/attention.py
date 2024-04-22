@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras import backend as K
+from tensorflow.keras import activations as A
 from keras.layers import Layer
 
 class AttentionTanh(Layer):
@@ -18,9 +19,9 @@ class AttentionTanh(Layer):
         super(AttentionTanh, self).build(input_shape)
 
     def call(self, x):
-        xQ = tf.math.tanh(K.dot(x, self.Q))
-        xK = tf.math.tanh(K.dot(x, self.K))
-        xV = tf.math.tanh(K.dot(x, self.V))
+        xQ = A.tanh(K.dot(x, self.Q))
+        xK = A.tanh(K.dot(x, self.K))
+        xV = A.tanh(K.dot(x, self.V))
 
         scores = K.dot(xQ, tf.transpose(xK)) / tf.math.sqrt(tf.cast(tf.shape(x)[-1], dtype='float32'))
         weights = tf.nn.softmax(scores, axis=-1)
@@ -60,9 +61,9 @@ class AttentionRelu(Layer):
         super(AttentionRelu, self).build(input_shape)
 
     def call(self, x):
-        xQ = tf.math.tanh(K.dot(x, self.Q))
-        xK = tf.math.tanh(K.dot(x, self.K))
-        xV = tf.math.tanh(K.dot(x, self.V))
+        xQ = A.relu(K.dot(x, self.Q))
+        xK = A.relu(K.dot(x, self.K))
+        xV = A.relu(K.dot(x, self.V))
 
         scores = K.dot(xQ, tf.transpose(xK)) / tf.math.sqrt(tf.cast(tf.shape(x)[-1], dtype='float32'))
         weights = tf.nn.softmax(scores, axis=-1)
